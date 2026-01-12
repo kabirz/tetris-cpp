@@ -50,7 +50,7 @@ private:
     QPushButton *m_resetButton;
 
     // 布局
-    QVBoxLayout *m_mainLayout;
+    QHBoxLayout *m_mainLayout;
     QHBoxLayout *m_gameLayout;
     QVBoxLayout *m_infoLayout;
 };

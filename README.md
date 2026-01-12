@@ -69,7 +69,7 @@ cmake --build build --config Release
 
 3. **部署Qt依赖**
 ```bash
-"C:/Qt/6.10.1/msvc2022_64/bin/windeployqt.exe" build/bin/Release/Tetris.exe
+C:/Qt/6.10.1/msvc2022_64/bin/windeployqt.exe build/bin/Release/Tetris.exe
 ```
 
 4. **运行程序**

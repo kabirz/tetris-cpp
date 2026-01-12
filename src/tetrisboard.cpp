@@ -11,7 +11,7 @@ TetrisBoard::TetrisBoard(TetrisGame *game, QWidget *parent)
     : QWidget(parent)
     , m_game(game)
 {
-    setMinimumSize(300, 600);
+    setMinimumSize(420, 550);
     setFocusPolicy(Qt::StrongFocus);
 }
 

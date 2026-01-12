@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     connectSignals();
     
     setWindowTitle("俄罗斯方块");
-    resize(500, 700);
+    resize(600, 700);
 }
 
 MainWindow::~MainWindow()
@@ -35,39 +35,36 @@ void MainWindow::setupUI()
     // 创建中央部件
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
-    
+
     // 创建主布局
-    m_mainLayout = new QVBoxLayout(centralWidget);
+    m_mainLayout = new QHBoxLayout(centralWidget);
     m_mainLayout->setContentsMargins(10, 10, 10, 10);
-    
-    // 创建游戏布局
-    m_gameLayout = new QHBoxLayout();
-    m_gameLayout->addWidget(m_board, 1);
-    
-    // 创建信息面板
+
+    // 创建左侧控制面板
     m_infoLayout = new QVBoxLayout();
-    
+    m_infoLayout->setSpacing(15);
+
     // 分数标签
     m_scoreLabel = new QLabel("分数:", this);
     m_scoreLabel->setStyleSheet("QLabel { font-size: 14px; font-weight: bold; color: white; }");
     m_scoreValue = new QLabel("0", this);
-    m_scoreValue->setStyleSheet("QLabel { font-size: 18px; font-weight: bold; color: #00ff00; }");
+    m_scoreValue->setStyleSheet("QLabel { font-size: 24px; font-weight: bold; color: #00ff00; }");
     m_scoreValue->setAlignment(Qt::AlignCenter);
-    
+
     // 等级标签
     m_levelLabel = new QLabel("等级:", this);
     m_levelLabel->setStyleSheet("QLabel { font-size: 14px; font-weight: bold; color: white; }");
     m_levelValue = new QLabel("1", this);
-    m_levelValue->setStyleSheet("QLabel { font-size: 18px; font-weight: bold; color: #ffff00; }");
+    m_levelValue->setStyleSheet("QLabel { font-size: 24px; font-weight: bold; color: #ffff00; }");
     m_levelValue->setAlignment(Qt::AlignCenter);
-    
+
     // 行数标签
     m_linesLabel = new QLabel("行数:", this);
     m_linesLabel->setStyleSheet("QLabel { font-size: 14px; font-weight: bold; color: white; }");
     m_linesValue = new QLabel("0", this);
-    m_linesValue->setStyleSheet("QLabel { font-size: 18px; font-weight: bold; color: #00ffff; }");
+    m_linesValue->setStyleSheet("QLabel { font-size: 24px; font-weight: bold; color: #00ffff; }");
     m_linesValue->setAlignment(Qt::AlignCenter);
-    
+
     // 添加到信息布局
     m_infoLayout->addWidget(m_scoreLabel);
     m_infoLayout->addWidget(m_scoreValue);
@@ -77,29 +74,39 @@ void MainWindow::setupUI()
     m_infoLayout->addSpacing(20);
     m_infoLayout->addWidget(m_linesLabel);
     m_infoLayout->addWidget(m_linesValue);
-    m_infoLayout->addStretch();
-    
+    m_infoLayout->addSpacing(30);
+
     // 创建按钮
     m_startButton = new QPushButton("开始游戏", this);
-    m_startButton->setStyleSheet("QPushButton { font-size: 14px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; } QPushButton:hover { background-color: #45a049; }");
-    
+    m_startButton->setStyleSheet("QPushButton { font-size: 14px; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; } QPushButton:hover { background-color: #45a049; }");
+    m_startButton->setMinimumWidth(120);
+
     m_pauseButton = new QPushButton("暂停", this);
-    m_pauseButton->setStyleSheet("QPushButton { font-size: 14px; padding: 10px; background-color: #ff9800; color: white; border: none; border-radius: 5px; } QPushButton:hover { background-color: #e68a00; }");
+    m_pauseButton->setStyleSheet("QPushButton { font-size: 14px; padding: 12px; background-color: #ff9800; color: white; border: none; border-radius: 5px; } QPushButton:hover { background-color: #e68a00; }");
     m_pauseButton->setEnabled(false);
-    
+    m_pauseButton->setMinimumWidth(120);
+
     m_resetButton = new QPushButton("重置", this);
-    m_resetButton->setStyleSheet("QPushButton { font-size: 14px; padding: 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; } QPushButton:hover { background-color: #da190b; }");
-    
+    m_resetButton->setStyleSheet("QPushButton { font-size: 14px; padding: 12px; background-color: #f44336; color: white; border: none; border-radius: 5px; } QPushButton:hover { background-color: #da190b; }");
+    m_resetButton->setMinimumWidth(120);
+
     m_infoLayout->addWidget(m_startButton);
+    m_infoLayout->addSpacing(10);
     m_infoLayout->addWidget(m_pauseButton);
+    m_infoLayout->addSpacing(10);
     m_infoLayout->addWidget(m_resetButton);
-    
-    // 添加到游戏布局
-    m_gameLayout->addLayout(m_infoLayout);
-    
-    // 添加到主布局
-    m_mainLayout->addLayout(m_gameLayout);
-    
+    m_infoLayout->addStretch();
+
+    // 创建游戏布局（游戏板居中）
+    m_gameLayout = new QHBoxLayout();
+    m_gameLayout->addStretch();
+    m_gameLayout->addWidget(m_board);
+    m_gameLayout->addStretch();
+
+    // 添加到主布局：左侧控制面板 + 中间游戏板
+    m_mainLayout->addLayout(m_infoLayout);
+    m_mainLayout->addLayout(m_gameLayout, 1);
+
     // 设置背景色
     centralWidget->setStyleSheet("QWidget { background-color: #1a1a2e; }");
 }
