@@ -1,0 +1,7 @@
+// Windows Resource File for Tetris Application
+// This file sets the application icon for Windows Explorer
+
+#include <windows.h>
+
+// Icon resource - IDI_ICON1 is the standard ID for the first icon
+IDI_ICON1 ICON "tetris.ico"

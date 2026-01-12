@@ -31,5 +31,5 @@ for block_group in blocks:
         draw.rounded_rectangle([(x1, y1), (x2-1, y2-1)], radius=2, fill=color)
 
 # Save as ICO with multiple sizes
-img.save('../resources/tetris.ico', format='ICO', sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (256, 256)])
+img.save('tetris.ico', format='ICO', sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
 print("Icon created successfully!")

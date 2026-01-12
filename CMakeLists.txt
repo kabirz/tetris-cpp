@@ -34,6 +34,11 @@ set(RESOURCES
     resources/resources.qrc
 )
 
+# Windows资源文件（用于设置可执行文件图标）
+if(WIN32)
+    list(APPEND RESOURCES resources/tetris.rc)
+endif()
+
 # 创建可执行文件
 add_executable(${PROJECT_NAME}
     ${SOURCES}
@@ -60,6 +65,26 @@ if(WIN32)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         WIN32_EXECUTABLE TRUE
     )
+    
+    # 查找windeployqt工具
+    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${Qt6_DIR}/../../../bin" "${Qt6_DIR}/bin")
+    
+    if(WINDEPLOYQT_EXECUTABLE)
+        # 添加windeployqt自定义目标
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${WINDEPLOYQT_EXECUTABLE}
+                --release
+                --no-translations
+                --no-system-d3d-compiler
+                --no-opengl-sw
+                $<TARGET_FILE:${PROJECT_NAME}>
+            COMMENT "Running windeployqt to deploy Qt dependencies..."
+            WORKING_DIRECTORY $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        )
+        message(STATUS "windeployqt found: ${WINDEPLOYQT_EXECUTABLE}")
+    else()
+        message(WARNING "windeployqt not found. Qt dependencies will not be automatically deployed.")
+    endif()
 endif()
 
 # 安装规则

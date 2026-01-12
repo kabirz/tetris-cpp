@@ -30,6 +30,12 @@
 ├── CMakeLists.txt              # CMake构建配置
 ├── CMakePresets.json          # CMake预设配置
 ├── README.md                  # 项目说明文档
+├── resources/
+│   ├── tetris.ico            # Windows应用程序图标
+│   ├── tetris.rc             # Windows资源文件
+│   ├── tetris_icon.svg       # SVG图标源文件
+│   ├── icon_gen.py           # 图标生成脚本
+│   └── resources.qrc         # Qt资源文件
 └── src/
     ├── main.cpp              # 程序入口
     ├── mainwindow.h          # 主窗口头文件
@@ -52,70 +58,40 @@
 ### 可选软件
 
 - **vcpkg**: C++包管理器（已安装）
+- **Python 3 + Pillow**: 用于生成应用程序图标（如果需要重新生成图标）
 
 ## 编译步骤
 
-### 方法1: 使用CMake预设（推荐）
+### 使用CMake预设（推荐）
 
 1. **配置项目**
 ```bash
-cmake --preset default
+cmake --preset release
 ```
 
 2. **编译项目**
 ```bash
-cmake --build build --config Release
+cmake --build --preset release
 ```
 
-3. **部署Qt依赖**
-```bash
-C:/Qt/6.10.1/msvc2022_64/bin/windeployqt.exe build/bin/Release/Tetris.exe
-```
-
-4. **运行程序**
+3. **运行程序**
 ```bash
 .\build\bin\Release\Tetris.exe
 ```
 
-### 方法2: 手动配置
+**注意**: windeployqt会在编译后自动部署Qt依赖库，无需手动运行。
 
-1. **创建构建目录**
+## 图标生成
+
+如果需要重新生成应用程序图标，请运行以下命令：
+
 ```bash
-mkdir build
-cd build
+powershell -Command "cd resources; python icon_gen.py"
 ```
 
-2. **配置CMake**
-```bash
-cmake -G Ninja -DCMAKE_PREFIX_PATH="C:/Qt/6.10.1/msvc2022_64" -DCMAKE_CXX_STANDARD=20 ..
-```
+这将生成包含多种尺寸（16x16, 32x32, 48x48, 64x64, 128x128, 256x256）的tetris.ico文件。
 
-3. **编译**
-```bash
-cmake --build .
-```
-
-4. **运行**
-```bash
-.\bin\Tetris.exe
-```
-
-### 方法3: 使用Visual Studio
-
-1. **生成Visual Studio解决方案**
-```bash
-cmake -G "Visual Studio 18 2026" -DCMAKE_PREFIX_PATH="C:/Qt/6.10.1/msvc2022_64" ..
-```
-
-2. **打开解决方案**
-```
-打开生成的 Tetris.sln 文件
-```
-
-3. **编译和运行**
-```
-在Visual Studio中按F5编译并运行
-```
+**注意**: 图标文件已包含在项目中，通常不需要重新生成。
 
 ## 部署说明
 
@@ -210,9 +186,9 @@ build/bin/Release/Tetris.exe
 
 ### 配置预设
 
-- **default**: 默认配置，使用Ninja生成器
-- **debug**: Debug构建模式
-- **release**: Release构建模式
+- **default**: 默认配置，使用Visual Studio 18 2026生成器
+- **debug**: Debug构建模式（继承default）
+- **release**: Release构建模式（继承default）
 
 ### 构建预设
 
@@ -287,6 +263,11 @@ build/bin/Release/Tetris.exe
 - 添加图形界面
 - 支持键盘控制
 - 实现分数系统
+
+### v1.0.1 (2025)
+- 集成windeployqt自动部署Qt依赖
+- 添加Windows应用程序图标支持
+- 优化构建配置
 
 ## 致谢
 
