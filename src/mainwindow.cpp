@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     createStatusBar();
     connectSignals();
     
-    setWindowTitle("俄罗斯方块 - Tetris");
+    setWindowTitle("俄罗斯方块");
     resize(500, 700);
 }
 
@@ -136,15 +136,32 @@ void MainWindow::createMenuBar()
     
     QAction *aboutAction = helpMenu->addAction("关于(&A)");
     connect(aboutAction, &QAction::triggered, [this]() {
-        QMessageBox::about(this, "关于俄罗斯方块",
-            "俄罗斯方块 v1.0\n\n"
-            "使用Qt6和C++20开发\n\n"
-            "操作说明:\n"
-            "← → : 左右移动\n"
-            "↓ : 加速下落\n"
-            "↑ : 旋转方块\n"
-            "空格 : 直接下落\n\n"
-            "祝您游戏愉快！");
+        QString aboutText = QString::fromUtf8(
+            "<h2>俄罗斯方块 v1.0</h2>"
+
+            "<h3>游戏控制</h3>"
+            "<table border='1' cellpadding='4' cellspacing='0' style='width:100%'>"
+            "<tr><td colspan='2'><b>方向键 / Vim</b></td><td><b>功能</b></td></tr>"
+            "<tr><td>← / h</td><td>→ / l</td><td>左右移动</td></tr>"
+            "<tr><td>↓ / j</td><td>↑ / k</td><td>加速下落 / 旋转</td></tr>"
+            "<tr><td colspan='2'><b>空格</b></td><td>直接落地</td></tr>"
+            "<tr><td colspan='3'><hr></td></tr>"
+            "<tr><td>Ctrl+S</td><td>Ctrl+P</td><td>开始 / 暂停</td></tr>"
+            "<tr><td>Ctrl+R</td><td>Ctrl+Q</td><td>重置 / 退出</td></tr>"
+            "</table>"
+
+            "<h3>得分规则</h3>"
+            "<ul>"
+            "<li>消除1行: 100 × 等级</li>"
+            "<li>消除2行: 300 × 等级</li>"
+            "<li>消除3行: 500 × 等级</li>"
+            "<li>消除4行: 800 × 等级</li>"
+            "<li>每消除10行升一级</li>"
+            "</ul>"
+
+            "<p style='margin:5px 0;'><i>祝您游戏愉快！</i></p>"
+        );
+        QMessageBox::about(this, "关于俄罗斯方块", aboutText);
     });
 }
 

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background -->
+  <rect x="0" y="0" width="64" height="64" fill="#1a1a2e" rx="8"/>
+
+  <!-- T Block (Purple) -->
+  <rect x="8" y="8" width="14" height="14" rx="2" fill="#9b59b6" stroke="#8e44ad" stroke-width="1"/>
+  <rect x="24" y="8" width="14" height="14" rx="2" fill="#9b59b6" stroke="#8e44ad" stroke-width="1"/>
+  <rect x="40" y="8" width="14" height="14" rx="2" fill="#9b59b6" stroke="#8e44ad" stroke-width="1"/>
+  <rect x="24" y="24" width="14" height="14" rx="2" fill="#9b59b6" stroke="#8e44ad" stroke-width="1"/>
+
+  <!-- I Block (Cyan) - partial on right side -->
+  <rect x="48" y="8" width="14" height="14" rx="2" fill="#00d4ff" stroke="#00b8e6" stroke-width="1"/>
+  <rect x="48" y="24" width="14" height="14" rx="2" fill="#00d4ff" stroke="#00b8e6" stroke-width="1"/>
+  <rect x="48" y="40" width="14" height="14" rx="2" fill="#00d4ff" stroke="#00b8e6" stroke-width="1"/>
+
+  <!-- O Block (Yellow) -->
+  <rect x="8" y="28" width="14" height="14" rx="2" fill="#f1c40f" stroke="#f39c12" stroke-width="1"/>
+  <rect x="24" y="28" width="14" height="14" rx="2" fill="#f1c40f" stroke="#f39c12" stroke-width="1"/>
+  <rect x="8" y="44" width="14" height="14" rx="2" fill="#f1c40f" stroke="#f39c12" stroke-width="1"/>
+  <rect x="24" y="44" width="14" height="14" rx="2" fill="#f1c40f" stroke="#f39c12" stroke-width="1"/>
+
+  <!-- L Block (Orange) -->
+  <rect x="32" y="44" width="14" height="14" rx="2" fill="#e67e22" stroke="#d35400" stroke-width="1"/>
+  <rect x="48" y="44" width="14" height="14" rx="2" fill="#e67e22" stroke="#d35400" stroke-width="1"/>
+</svg>

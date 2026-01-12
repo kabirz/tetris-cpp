@@ -12,7 +12,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 # 查找Qt6包
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Svg)
 
 # 源文件
 set(SOURCES
@@ -29,10 +29,16 @@ set(HEADERS
     src/tetrisboard.h
 )
 
+# 资源文件
+set(RESOURCES
+    resources/resources.qrc
+)
+
 # 创建可执行文件
 add_executable(${PROJECT_NAME}
     ${SOURCES}
     ${HEADERS}
+    ${RESOURCES}
 )
 
 # 链接Qt6库
@@ -41,6 +47,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt6::Core
     Qt6::Widgets
     Qt6::Gui
+    Qt6::Svg
 )
 
 # 设置输出目录

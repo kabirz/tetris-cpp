@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Tetris Icon</title>
+</head>
+<body>
+    <canvas id="canvas" width="256" height="256"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        ctx.fillStyle = '#1a1a2e';
+        ctx.beginPath();
+        ctx.roundRect(0, 0, 256, 256, 32);
+        ctx.fill();
+
+        // Block size
+        const bs = 32;
+        const gap = 4;
+
+        // Draw blocks
+        function drawBlock(x, y, color, strokeColor) {
+            ctx.fillStyle = color;
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(x, y, bs, bs, 4);
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        // T block (purple)
+        drawBlock(16, 16, '#9b59b6', '#8e44ad');
+        drawBlock(16 + bs + gap, 16, '#9b59b6', '#8e44ad');
+        drawBlock(16 + 2*bs + 2*gap, 16, '#9b59b6', '#8e44ad');
+        drawBlock(16 + bs + gap, 16 + bs + gap, '#9b59b6', '#8e44ad');
+
+        // I block (cyan)
+        drawBlock(208, 16, '#00d4ff', '#00b8e6');
+        drawBlock(208, 16 + bs + gap, '#00d4ff', '#00b8e6');
+        drawBlock(208, 16 + 2*bs + 2*gap, '#00d4ff', '#00b8e6');
+        drawBlock(208, 16 + 3*bs + 3*gap, '#00d4ff', '#00b8e6');
+
+        // O block (yellow)
+        drawBlock(16, 80, '#f1c40f', '#f39c12');
+        drawBlock(16 + bs + gap, 80, '#f1c40f', '#f39c12');
+        drawBlock(16, 80 + bs + gap, '#f1c40f', '#f39c12');
+        drawBlock(16 + bs + gap, 80 + bs + gap, '#f1c40f', '#f39c12');
+
+        // L block (orange)
+        drawBlock(120, 80, '#e67e22', '#d35400');
+        drawBlock(120, 80 + bs + gap, '#e67e22', '#d35400');
+        drawBlock(120, 80 + 2*bs + 2*gap, '#e67e22', '#d35400');
+        drawBlock(120 + bs + gap, 80 + 2*bs + 2*gap, '#e67e22', '#d35400');
+
+        // J block (blue)
+        drawBlock(120, 160, '#3498db', '#2980b9');
+        drawBlock(120, 160 + bs + gap, '#3498db', '#2980b9');
+        drawBlock(120 + bs + gap, 160 + bs + gap, '#3498db', '#2980b9');
+        drawBlock(120 + 2*bs + 2*gap, 160 + bs + gap, '#3498db', '#2980b9');
+
+        // S block (green)
+        drawBlock(208, 160, '#2ecc71', '#27ae60');
+        drawBlock(208 + bs + gap, 160, '#2ecc71', '#27ae60');
+        drawBlock(208 - bs - gap, 160 + bs + gap, '#2ecc71', '#27ae60');
+        drawBlock(208, 160 + bs + gap, '#2ecc71', '#27ae60');
+
+        // Z block (red)
+        drawBlock(16, 160, '#e74c3c', '#c0392b');
+        drawBlock(16 + bs + gap, 160, '#e74c3c', '#c0392b');
+        drawBlock(16 + bs + gap, 160 + bs + gap, '#e74c3c', '#c0392b');
+        drawBlock(16 + 2*bs + 2*gap, 160 + bs + gap, '#e74c3c', '#c0392b');
+
+        // Download
+        const link = document.createElement('a');
+        link.download = 'tetris.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    </script>
+</body>
+</html>

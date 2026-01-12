@@ -6,18 +6,9 @@
       "displayName": "Default Config",
       "generator": "Visual Studio 18 2026",
       "binaryDir": "${sourceDir}/build",
-      "toolchainFile": "C:/Users/jxwaz/code/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
       "cacheVariables": {
-        "CMAKE_CXX_STANDARD": "20",
-        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "CMAKE_PREFIX_PATH": "C:/Qt/6.10.1/msvc2022_64",
-        "Qt6_DIR": "C:/Qt/6.10.1/msvc2022_64/lib/cmake/Qt6",
-        "Qt6Widgets_DIR": "C:/Qt/6.10.1/msvc2022_64/lib/cmake/Qt6Widgets",
-        "Qt6Gui_DIR": "C:/Qt/6.10.1/msvc2022_64/lib/cmake/Qt6Gui",
-        "Qt6Core_DIR": "C:/Qt/6.10.1/msvc2022_64/lib/cmake/Qt6Core",
-        "CMAKE_C_COMPILER": "cl",
-        "CMAKE_CXX_COMPILER": "cl"
+        "CMAKE_PREFIX_PATH": "C:/Qt/6.10.1/msvc2022_64"
       }
     },
     {

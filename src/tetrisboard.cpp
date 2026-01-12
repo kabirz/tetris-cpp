@@ -163,7 +163,7 @@ void TetrisBoard::drawNextPiece(QPainter &painter)
     // 绘制标签
     painter.setPen(QColor(255, 255, 255));
     painter.setFont(QFont("Arial", 12, QFont::Bold));
-    painter.drawText(startX, startY - 10, "Next:");
+    painter.drawText(startX, startY - 10, "下一个:");
 
     // 绘制下一个方块
     for (const auto& point : nextPiece) {
