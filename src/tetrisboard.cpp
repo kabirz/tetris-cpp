@@ -57,6 +57,7 @@ void TetrisBoard::drawBoard(QPainter &painter)
     QVector<QPoint> currentPiece = m_game->getCurrentPiece();
     QColor currentColor = m_game->getCurrentPieceColor();
     QPoint currentPos = m_game->getCurrentPos();
+    QPoint shadowPos = m_game->getShadowPos();
 
     // 绘制已放置的方块
     for (int y = 0; y < board.size(); ++y) {
@@ -68,6 +69,11 @@ void TetrisBoard::drawBoard(QPainter &painter)
                 painter.drawRect(cell);
             }
         }
+    }
+
+    // 绘制阴影（如果阴影位置与当前位置不同）
+    if (!m_game->isGameOver() && !currentPiece.isEmpty() && shadowPos != currentPos) {
+        drawShadow(painter, currentPiece, shadowPos, currentColor);
     }
 
     // 绘制当前方块
@@ -100,6 +106,28 @@ void TetrisBoard::drawPiece(QPainter &painter, const QVector<QPoint> &piece,
         
         // 绘制边框
         painter.setPen(QColor(0, 0, 0));
+        painter.drawRect(cell);
+    }
+}
+
+void TetrisBoard::drawShadow(QPainter &painter, const QVector<QPoint> &piece,
+                            const QPoint &pos, const QColor &color)
+{
+    for (const auto& point : piece) {
+        int x = (pos.x() + point.x()) * cellSize();
+        int y = (pos.y() + point.y()) * cellSize();
+        
+        QRect cell(x, y, cellSize(), cellSize());
+        
+        // 绘制半透明阴影
+        QColor shadowColor = color;
+        shadowColor.setAlpha(80);
+        painter.fillRect(cell, shadowColor);
+        
+        // 绘制虚线边框
+        QPen pen(QColor(255, 255, 255, 150), 1);
+        pen.setStyle(Qt::DashLine);
+        painter.setPen(pen);
         painter.drawRect(cell);
     }
 }
@@ -158,6 +186,7 @@ void TetrisBoard::keyPressEvent(QKeyEvent *event)
     }
 
     switch (event->key()) {
+        // 标准方向键
         case Qt::Key_Left:
             m_game->moveLeft();
             break;
@@ -172,6 +201,19 @@ void TetrisBoard::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Space:
             m_game->hardDrop();
+            break;
+        // Vim风格按键
+        case Qt::Key_H:
+            m_game->moveLeft();
+            break;
+        case Qt::Key_L:
+            m_game->moveRight();
+            break;
+        case Qt::Key_J:
+            m_game->moveDown();
+            break;
+        case Qt::Key_K:
+            m_game->rotate();
             break;
         default:
             QWidget::keyPressEvent(event);

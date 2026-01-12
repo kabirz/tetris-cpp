@@ -52,6 +52,7 @@ public:
     QVector<QPoint> getNextPiece() const;
     QColor getNextPieceColor() const;
     QPoint getCurrentPos() const;
+    QPoint getShadowPos() const;
 
 signals:
     void boardChanged();

@@ -201,6 +201,26 @@ QPoint TetrisGame::getCurrentPos() const
     return m_currentPos;
 }
 
+QPoint TetrisGame::getShadowPos() const
+{
+    if (m_gameOver) return m_currentPos;
+    
+    QVector<QPoint> piece = getTetrominoShape(m_currentTetromino, m_currentRotation);
+    if (piece.isEmpty()) return m_currentPos;
+    
+    QPoint shadowPos = m_currentPos;
+    
+    // 向下移动直到碰撞
+    while (isValidPosition(piece, shadowPos)) {
+        shadowPos.setY(shadowPos.y() + 1);
+    }
+    
+    // 回退一步到有效位置
+    shadowPos.setY(shadowPos.y() - 1);
+    
+    return shadowPos;
+}
+
 void TetrisGame::gameLoop()
 {
     moveDown();

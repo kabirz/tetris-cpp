@@ -27,8 +27,10 @@ private:
 
     // 绘制相关
     void drawBoard(QPainter &painter);
-    void drawPiece(QPainter &painter, const QVector<QPoint> &piece, 
+    void drawPiece(QPainter &painter, const QVector<QPoint> &piece,
                    const QPoint &pos, const QColor &color);
+    void drawShadow(QPainter &painter, const QVector<QPoint> &piece,
+                    const QPoint &pos, const QColor &color);
     void drawGrid(QPainter &painter);
     void drawNextPiece(QPainter &painter);
 
