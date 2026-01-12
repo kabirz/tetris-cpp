@@ -185,6 +185,12 @@ void TetrisBoard::keyPressEvent(QKeyEvent *event)
         return;
     }
 
+    // 只有在游戏开始后才能操作方块
+    if (!m_game->isGameStarted()) {
+        QWidget::keyPressEvent(event);
+        return;
+    }
+
     switch (event->key()) {
         // 标准方向键
         case Qt::Key_Left:

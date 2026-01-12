@@ -6,6 +6,7 @@ TetrisGame::TetrisGame(QObject *parent)
     : QObject(parent)
     , m_gameOver(false)
     , m_paused(false)
+    , m_gameStarted(false)
     , m_score(0)
     , m_level(1)
     , m_lines(0)
@@ -36,6 +37,7 @@ TetrisGame::~TetrisGame()
 void TetrisGame::start()
 {
     reset();
+    m_gameStarted = true;
     spawnPiece();
     m_gameTimer->start(m_dropInterval);
 }
@@ -68,6 +70,7 @@ void TetrisGame::reset()
     // 重置游戏状态
     m_gameOver = false;
     m_paused = false;
+    m_gameStarted = false;
     m_score = 0;
     m_level = 1;
     m_lines = 0;
@@ -180,6 +183,11 @@ bool TetrisGame::isPaused() const
     return m_paused;
 }
 
+bool TetrisGame::isGameStarted() const
+{
+    return m_gameStarted;
+}
+
 int TetrisGame::getScore() const
 {
     return m_score;
@@ -202,7 +210,7 @@ const QVector<QVector<int>>& TetrisGame::getBoard() const
 
 QVector<QPoint> TetrisGame::getCurrentPiece() const
 {
-    if (m_gameOver) return QVector<QPoint>();
+    if (m_gameOver || !m_gameStarted) return QVector<QPoint>();
     return getTetrominoShape(m_currentTetromino, m_currentRotation);
 }
 
@@ -228,8 +236,8 @@ QPoint TetrisGame::getCurrentPos() const
 
 QPoint TetrisGame::getShadowPos() const
 {
-    if (m_gameOver) return m_currentPos;
-    
+    if (m_gameOver || !m_gameStarted) return m_currentPos;
+
     QVector<QPoint> piece = getTetrominoShape(m_currentTetromino, m_currentRotation);
     if (piece.isEmpty()) return m_currentPos;
     

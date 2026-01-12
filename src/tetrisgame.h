@@ -41,6 +41,7 @@ public:
     // 游戏状态查询
     bool isGameOver() const;
     bool isPaused() const;
+    bool isGameStarted() const;
     int getScore() const;
     int getLevel() const;
     int getLines() const;
@@ -84,6 +85,7 @@ private:
     // 游戏状态
     bool m_gameOver;
     bool m_paused;
+    bool m_gameStarted;
     int m_score;
     int m_level;
     int m_lines;
