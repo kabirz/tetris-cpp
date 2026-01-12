@@ -125,23 +125,48 @@ void TetrisGame::rotate()
 {
     if (m_gameOver || m_paused) return;
 
+    // O方块不需要旋转
+    if (m_currentTetromino == Tetromino::O) {
+        return;
+    }
+
     Rotation newRotation = static_cast<Rotation>((static_cast<int>(m_currentRotation) + 1) % 4);
     QVector<QPoint> newShape = getTetrominoShape(m_currentTetromino, newRotation);
 
-    if (isValidPosition(newShape, m_currentPos)) {
-        m_currentRotation = newRotation;
-        emit boardChanged();
+    // 尝试墙踢：先尝试原地，再尝试左右移动
+    QVector<int> kickTests = {0, -1, 1};
+
+    for (int kick : kickTests) {
+        QPoint testPos = m_currentPos;
+        testPos.setX(testPos.x() + kick);
+        if (isValidPosition(newShape, testPos)) {
+            m_currentPos = testPos;
+            m_currentRotation = newRotation;
+            emit boardChanged();
+            return;
+        }
     }
+
+    // 所有墙踢都失败，不旋转
 }
 
 void TetrisGame::hardDrop()
 {
     if (m_gameOver || m_paused) return;
 
-    while (isValidPosition(getCurrentPiece(), m_currentPos)) {
+    // 添加最大迭代次数防止无限循环
+    int maxIterations = BOARD_HEIGHT + 10;
+    int iterations = 0;
+    
+    while (isValidPosition(getCurrentPiece(), m_currentPos) && iterations < maxIterations) {
         m_currentPos.setY(m_currentPos.y() + 1);
+        iterations++;
     }
-    m_currentPos.setY(m_currentPos.y() - 1);
+    
+    if (iterations > 0) {
+        m_currentPos.setY(m_currentPos.y() - 1);
+    }
+    
     lockPiece();
 }
 
@@ -210,13 +235,19 @@ QPoint TetrisGame::getShadowPos() const
     
     QPoint shadowPos = m_currentPos;
     
-    // 向下移动直到碰撞
-    while (isValidPosition(piece, shadowPos)) {
+    // 向下移动直到碰撞，添加最大迭代次数防止无限循环
+    int maxIterations = BOARD_HEIGHT + 10;
+    int iterations = 0;
+    
+    while (isValidPosition(piece, shadowPos) && iterations < maxIterations) {
         shadowPos.setY(shadowPos.y() + 1);
+        iterations++;
     }
     
     // 回退一步到有效位置
-    shadowPos.setY(shadowPos.y() - 1);
+    if (iterations > 0) {
+        shadowPos.setY(shadowPos.y() - 1);
+    }
     
     return shadowPos;
 }
@@ -229,38 +260,101 @@ void TetrisGame::gameLoop()
 QVector<QPoint> TetrisGame::getTetrominoShape(Tetromino type, Rotation rotation) const
 {
     QVector<QPoint> shape;
-    
+
+    // 方块坐标定义：所有坐标相对于方块的某个基准点
+    // 避免使用负坐标，确保方块生成时不会超出边界
     switch (type) {
         case Tetromino::I:
+            // I型: 竖直4格
             shape = {{0, 0}, {0, 1}, {0, 2}, {0, 3}};
             break;
         case Tetromino::O:
+            // O型: 2x2正方形
             shape = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
             break;
         case Tetromino::T:
-            shape = {{0, 1}, {1, 0}, {1, 1}, {1, 2}};
+            // T型: T字形
+            shape = {{0, 0}, {1, 0}, {2, 0}, {1, 1}};
             break;
         case Tetromino::S:
-            shape = {{0, 1}, {0, 2}, {1, 0}, {1, 1}};
+            // S型: S字形
+            shape = {{1, 0}, {2, 0}, {0, 1}, {1, 1}};
             break;
         case Tetromino::Z:
-            shape = {{0, 0}, {0, 1}, {1, 1}, {1, 2}};
+            // Z型: Z字形
+            shape = {{0, 0}, {1, 0}, {1, 1}, {2, 1}};
             break;
         case Tetromino::J:
-            shape = {{0, 0}, {1, 0}, {1, 1}, {1, 2}};
+            // J型: J字形
+            shape = {{0, 0}, {0, 1}, {1, 1}, {2, 1}};
             break;
         case Tetromino::L:
-            shape = {{0, 2}, {1, 0}, {1, 1}, {1, 2}};
+            // L型: L字形
+            shape = {{2, 0}, {0, 1}, {1, 1}, {2, 1}};
+            break;
+    }
+
+    // O型不需要旋转
+    if (type == Tetromino::O) {
+        return shape;
+    }
+
+    // I型特殊处理：围绕中心旋转
+    if (type == Tetromino::I) {
+        // I型的4个旋转状态
+        switch (rotation) {
+            case Rotation::North:
+                shape = {{0, 0}, {0, 1}, {0, 2}, {0, 3}};
+                break;
+            case Rotation::East:
+                shape = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
+                break;
+            case Rotation::South:
+                shape = {{0, 0}, {0, 1}, {0, 2}, {0, 3}};
+                break;
+            case Rotation::West:
+                shape = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
+                break;
+        }
+        return shape;
+    }
+
+    // 其他方块：围绕中心点旋转
+    // 定义旋转中心（相对于基准点）
+    QPoint center;
+    switch (type) {
+        case Tetromino::T:
+            center = QPoint(1, 0);
+            break;
+        case Tetromino::S:
+            center = QPoint(1, 0);
+            break;
+        case Tetromino::Z:
+            center = QPoint(1, 0);
+            break;
+        case Tetromino::J:
+            center = QPoint(1, 1);
+            break;
+        case Tetromino::L:
+            center = QPoint(1, 1);
+            break;
+        default:
+            center = QPoint(0, 0);
             break;
     }
 
     // 应用旋转
     for (int i = 0; i < static_cast<int>(rotation); ++i) {
         for (auto& point : shape) {
-            int x = point.x();
-            int y = point.y();
-            point.setX(-y);
-            point.setY(x);
+            // 先平移到原点
+            int x = point.x() - center.x();
+            int y = point.y() - center.y();
+            // 旋转
+            int newX = -y;
+            int newY = x;
+            // 平移回中心
+            point.setX(newX + center.x());
+            point.setY(newY + center.y());
         }
     }
 
@@ -297,13 +391,13 @@ bool TetrisGame::checkCollision(const QVector<QPoint>& piece, const QPoint& pos)
         int x = pos.x() + point.x();
         int y = pos.y() + point.y();
 
-        // 检查边界
-        if (x < 0 || x >= BOARD_WIDTH || y >= BOARD_HEIGHT) {
+        // 检查边界（包括负坐标）
+        if (x < 0 || x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT) {
             return true;
         }
 
         // 检查是否与已放置的方块碰撞
-        if (y >= 0 && m_board[y][x] != 0) {
+        if (m_board[y][x] != 0) {
             return true;
         }
     }
@@ -315,7 +409,24 @@ void TetrisGame::spawnPiece()
     m_currentTetromino = m_nextTetromino;
     m_currentColor = m_nextColor;
     m_currentRotation = Rotation::North;
-    m_currentPos = QPoint(BOARD_WIDTH / 2 - 1, 0);
+
+    // 根据方块类型调整生成位置
+    int xOffset = 0;
+    switch (m_currentTetromino) {
+        case Tetromino::I:
+        case Tetromino::O:
+            xOffset = BOARD_WIDTH / 2 - 1;
+            break;
+        case Tetromino::T:
+        case Tetromino::S:
+        case Tetromino::Z:
+        case Tetromino::J:
+        case Tetromino::L:
+            xOffset = BOARD_WIDTH / 2 - 2;
+            break;
+    }
+
+    m_currentPos = QPoint(xOffset, 0);
 
     m_nextTetromino = getRandomTetromino();
     m_nextColor = getTetrominoColor(m_nextTetromino);
